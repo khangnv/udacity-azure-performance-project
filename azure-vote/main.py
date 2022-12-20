@@ -84,20 +84,20 @@ else:
     title = app.config['TITLE']
 
 # Redis Connection
-r = redis.Redis()
+# r = redis.Redis() #VMSS
 
-# redis_server = os.environ['REDIS']
+redis_server = os.environ['REDIS']  #AKS
 
-# try:
-#     if "REDIS_PWD" in os.environ:
-#         r = redis.StrictRedis(host=redis_server,
-#                               port=6379,
-#                               password=os.environ['REDIS_PWD'])
-#     else:
-#         r = redis.Redis(redis_server)
-#     r.ping()
-# except redis.ConnectionError:
-#     exit('Failed to connect to Redis, terminating.')
+try:
+    if "REDIS_PWD" in os.environ:
+        r = redis.StrictRedis(host=redis_server,
+                              port=6379,
+                              password=os.environ['REDIS_PWD'])
+    else:
+        r = redis.Redis(redis_server)
+    r.ping()
+except redis.ConnectionError:
+    exit('Failed to connect to Redis, terminating.')
 
 # Change title to host name to demo NLB
 if app.config['SHOWHOST'] == "true":
